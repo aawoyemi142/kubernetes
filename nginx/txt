@@ -1,0 +1,40 @@
+FROM ubuntu:16.04
+MAINTAINER aade <adeawolinux@gmail.com>
+
+RUN apt-get update && \
+    apt-get install -y \
+    vim \
+    curl \
+    git \
+    apache2 \
+    php \
+    mysql-server \
+    phpmyadmin
+    libapache2-mod-php \
+    php7.4-common \
+    php7.4-mysql \
+    php7.4-xml \
+    php7.4-xmlrpc \
+    php7.4-curl \
+    php7.4-gd \
+    php7.4-imagick \
+    php7.4-cli \
+    php7.4-dev \
+    php7.4-imap \
+    php7.4-mbstring \
+    php7.4-opcache \
+    php7.4-soap \
+    php7.4-zip \
+    php7.4-intl && \
+    ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata && \
+    curl -sS https://getcomposer.org/installer -o setup.php  \
+    php setup.php --install-dir=/usr/local/bin --filename=composer && \
+    rm setup.php
+COPY run.sh /usr/local/bin/
+COPY mysql_test.php /opt
+RUN chmod 700 /usr/local/bin/run.sh 
+RUN a2enmod rewrite
+
+EXPOSE 80
+ENTRYPOINT ["run.sh"]

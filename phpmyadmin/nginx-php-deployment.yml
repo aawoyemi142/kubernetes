@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-php-deployment
+  labels:
+    type: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: php
+      type: backend
+  template:
+    metadata:
+      labels:
+        app: php
+        type: backend
+    spec:
+      volumes:
+      - name: nginx-php-pvclaim
+        persistentVolumeClaim:
+          claimName: nginx-php-pvclaim
+      - name: nginx-php-config
+        configMap:
+          name: nginx-php-config
+      containers:
+      - name: php
+        image: php8.1-fpm
+        volumeMounts:
+        - name: nginx-php-config
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: default.conf
+        - name: nginx-php-pvclaim
+          mountPath: /srv/app/
+      - name: nginx
+        image: nginx:alpine
+        volumeMounts:
+        - name: nginx-php-config
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: default.conf
+        - name: nginx-php-pvclaim
+          mountPath: /srv/app/
+          
+          
