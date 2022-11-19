@@ -35,7 +35,7 @@ spec:
           - name: "SONARQUBE_JDBC_USERNAME"
             value: "admin"
           - name: "SONARQUBE_JDBC_URL"
-            value: "jdbc:postgresql://medium.postgres.database.azure.com/sonar"
+            value: "jdbc:postgresql://localhost/sonarqube"
           - name: "SONARQUBE_JDBC_PASSWORD"
             valueFrom:
               secretKeyRef:
